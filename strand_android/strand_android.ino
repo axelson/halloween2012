@@ -20,8 +20,16 @@ LPD8806 strip = LPD8806(32, dataPin, clockPin);
 // on Megas thats data = 51, and clock = 52
 //LPD8806 strip = LPD8806(32);
 
+// Flag for coooperative multitasking
+static int needChange = 0;
+
+// Counter sent back to android (probably remove later)
 static int counter = 0;
-static int sleepTime = 2000;
+
+// Sleep time per cycle
+static int sleepTime = 0;
+
+// Flag for using rainbow colors
 static int niceColors = 0;
 
 void setup() {
