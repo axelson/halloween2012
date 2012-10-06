@@ -75,7 +75,7 @@ public class DemoActivity extends Activity {
 
         public void onClick(View v) {
             try {
-                if(mSerialDevice == null) {
+                if (mSerialDevice == null) {
                     mDumpTextView.append("Buttons don't work until serial device connected\n");
                     return;
                 }
