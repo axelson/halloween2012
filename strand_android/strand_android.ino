@@ -1,6 +1,9 @@
 #include "LPD8806.h"
 #include "SPI.h"
 
+#define Check_Return checkSerial(); \
+  if( needChange ) return;
+
 // Example to control LPD8806-based RGB LED Modules in a strip
 
 /*****************************************************************************/
@@ -47,29 +50,7 @@ void loop() {
   Serial.print("Tick #");
   Serial.print(counter++, DEC);
   Serial.print("\n");
-  int readCommand = 0;
 
-  if (Serial.peek() != -1) {
-    Serial.print("Read: ");
-    do {
-      if(readCommand) {
-        readCommand = 0;
-        if(Serial.peek() == '1') {
-          niceColors = 1;
-          sleepTime = 2000;
-        }
-        if(Serial.peek() == '2') {
-          sleepTime = 1000;
-          niceColors = 0;
-        }
-      }
-      if(Serial.peek() == 'Z') {
-        readCommand = 1;
-      }
-      Serial.print((char) Serial.read());
-    } while (Serial.peek() != -1);
-    Serial.print("\n");
-  }
   delay(sleepTime);
   /*
   colorChase(strip.Color(127,127,127), 10);
@@ -102,6 +83,7 @@ void rainbow(uint8_t wait) {
 
   for (j=0; j < 384; j++) {     // 3 cycles of all 384 colors in the wheel
     for (i=0; i < strip.numPixels(); i++) {
+      Check_Return
       strip.setPixelColor(i, Wheel( (i + j) % 384));
     }
     strip.show();   // write all the pixels out
@@ -116,6 +98,7 @@ void rainbowCycle(uint8_t wait) {
 
   for (j=0; j < 384 * 5; j++) {     // 5 cycles of all 384 colors in the wheel
     for (i=0; i < strip.numPixels(); i++) {
+      Check_Return
       // tricky math! we use each pixel as a fraction of the full 384-color wheel
       // (thats the i / strip.numPixels() part)
       // Then add in j which makes the colors go around per pixel
@@ -133,6 +116,7 @@ void colorWipe(uint32_t c, uint8_t wait) {
   int i;
 
   for (i=0; i < strip.numPixels(); i++) {
+      Check_Return
       strip.setPixelColor(i, c);
       strip.show();
       delay(wait);
@@ -149,6 +133,7 @@ void colorChase(uint32_t c, uint8_t wait) {
   }
 
   for (i=0; i < strip.numPixels(); i++) {
+      Check_Return
       strip.setPixelColor(i, c);
       if (i == 0) {
         strip.setPixelColor(strip.numPixels()-1, 0);
@@ -187,4 +172,31 @@ uint32_t Wheel(uint16_t WheelPos)
       break;
   }
   return(strip.Color(r,g,b));
+}
+
+void checkSerial() {
+  needChange = 0;
+  int readCommand = 0;
+  if (Serial.peek() != -1) {
+    Serial.print("Read: ");
+    do {
+      if(readCommand) {
+        needChange = 1;
+        readCommand = 0;
+        if(Serial.peek() == '1') {
+          niceColors = 1;
+          sleepTime = 0000;
+        }
+        if(Serial.peek() == '2') {
+          sleepTime = 0000;
+          niceColors = 0;
+        }
+      }
+      if(Serial.peek() == 'Z') {
+        readCommand = 1;
+      }
+      Serial.print((char) Serial.read());
+    } while (Serial.peek() != -1);
+    Serial.print("\n");
+  }
 }
