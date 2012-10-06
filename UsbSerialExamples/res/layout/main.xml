@@ -18,13 +18,13 @@
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button1" />
+            android:text="Rainbow" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button2" />
+            android:text="Stripes" />
     </LinearLayout>
 
     <ScrollView
