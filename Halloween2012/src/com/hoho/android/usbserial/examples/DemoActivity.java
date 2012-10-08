@@ -23,6 +23,7 @@ package com.hoho.android.usbserial.examples;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.usb.UsbManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -204,6 +205,12 @@ public class DemoActivity extends Activity {
                 + HexDump.dumpHexString(data) + "\n\n";
         mDumpTextView.append(message);
         mScrollView.smoothScrollTo(0, mDumpTextView.getBottom());
+    }
+
+    private void playBadumTish() {
+        mDumpTextView.append("playing badum tish");
+        MediaPlayer mediaPlayer = MediaPlayer.create(DemoActivity.this, R.raw.badumtish);
+        mediaPlayer.start();
     }
 
 }
