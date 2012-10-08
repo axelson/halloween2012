@@ -33,7 +33,7 @@ static int counter = 0;
 static int sleepTime = 0;
 
 // Flag for using rainbow colors
-static int niceColors = 0;
+static int niceColors = 1;
 
 void setup() {
   // Start up the LED strip
