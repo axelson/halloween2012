@@ -218,7 +218,7 @@ public class DemoActivity extends Activity {
     }
 
     private void playBadumTish() {
-        mDumpTextView.append("playing badum tish");
+        mDumpTextView.append("playing badum tish\n");
         MediaPlayer mediaPlayer = MediaPlayer.create(DemoActivity.this, R.raw.badumtish);
         mediaPlayer.start();
     }
