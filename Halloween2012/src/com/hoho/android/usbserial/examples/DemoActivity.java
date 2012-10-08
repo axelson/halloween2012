@@ -67,6 +67,7 @@ public class DemoActivity extends Activity {
     private ScrollView mScrollView;
     private Button mButton1;
     private Button mButton2;
+    private Button mButtonBadum;
 
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
 
@@ -135,8 +136,17 @@ public class DemoActivity extends Activity {
         mScrollView = (ScrollView) findViewById(R.id.demoScroller);
         mButton1 = (Button) findViewById(R.id.button1);
         mButton2 = (Button) findViewById(R.id.button2);
+        mButtonBadum = (Button) findViewById(R.id.buttonBadum);
         mButton1.setOnClickListener(mClickListener);
         mButton2.setOnClickListener(mClickListener);
+
+        mButtonBadum.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                playBadumTish();
+            }
+        });
     }
 
     @Override
