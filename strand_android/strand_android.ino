@@ -12,6 +12,7 @@
 // Can be any valid output pins.
 int dataPin = 2;
 int clockPin = 3;
+int ledPin = 13;
 
 // Set the first variable to the NUMBER of pixels. 32 = 32 pixels in a row
 // The LED strips are 32 LEDs per meter but you can extend/cut the strip
@@ -35,6 +36,9 @@ static int sleepTime = 0;
 // Flag for using rainbow colors
 static int niceColors = 1;
 
+static int ledSwitchPin = 8;
+static int val = 0;
+
 void setup() {
   // Start up the LED strip
   strip.begin();
@@ -43,10 +47,23 @@ void setup() {
   strip.show();
 
   Serial.begin(115200);
+
+  pinMode(ledSwitchPin, INPUT);
+  pinMode(ledPin, OUTPUT);
 }
 
 
 void loop() {
+  lightsOff();
+  if(val == 1) {
+    delay(10);
+    
+    lightsOff();
+    checkSerial();
+    return;
+  }
+  else {
+
   Serial.print("Tick #");
   Serial.print(counter++, DEC);
   Serial.print("\n");
@@ -66,16 +83,20 @@ void loop() {
   // fill the entire strip with...
   colorWipe(strip.Color(127,0,0), 10);		// red
   */
+  //if( niceColors ) {
   if( niceColors ) {
     rainbowCycle(0);  // make it go through the cycle fairly fast
+    //lightsOff();
   }
   else {
+    lightsOff();
     colorWipe(strip.Color(0, 127,0), 10);		// green
     colorWipe(strip.Color(0,0,127), 10);		// blue
   }
 //  rainbow(10);
 
   //rainbowCycle(0);  // make it go through the cycle fairly fast
+  }
 }
 
 void rainbow(uint8_t wait) {
@@ -174,8 +195,26 @@ uint32_t Wheel(uint16_t WheelPos)
   return(strip.Color(r,g,b));
 }
 
+void lightsOff() {
+  int i;
+
+  //for (i=0; i < strip.numPixels(); i++) {
+    for (i=0; i < 32; i++) {
+    strip.setPixelColor(i, 0);  // turn all pixels off
+  }
+  strip.show();
+}
+
+
 void checkSerial() {
+  val = digitalRead(ledSwitchPin);
+  digitalWrite(ledPin, val);
+
+  
   needChange = 0;
+  if(val == 1) {
+    needChange = 1;
+  }
   int readCommand = 0;
   if (Serial.peek() != -1) {
     Serial.print("Read: ");
